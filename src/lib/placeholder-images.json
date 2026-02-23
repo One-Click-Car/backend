@@ -1,0 +1,46 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-car",
+      "description": "Modern electric car on a scenic road",
+      "imageUrl": "https://images.unsplash.com/photo-1764588070182-8bea428915a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bHV4dXJ5JTIwZWxlY3RyaWMlMjBjYXJ8ZW58MHx8fHwxNzcxNjc2OTg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury electric car"
+    },
+    {
+      "id": "suv-listing",
+      "description": "Black luxury SUV",
+      "imageUrl": "https://images.unsplash.com/photo-1692370793611-7724a38ab701?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxibGFjayUyMFNVVnxlbnwwfHx8fDE3NzE1ODgyODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black SUV"
+    },
+    {
+      "id": "sedan-listing",
+      "description": "Sleek silver sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1645596105558-a6434c16fbc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzaWx2ZXIlMjBzZWRhbnxlbnwwfHx8fDE3NzE2MjM2Mzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "silver sedan"
+    },
+    {
+      "id": "sports-listing",
+      "description": "Red sports car",
+      "imageUrl": "https://images.unsplash.com/photo-1696581084151-8a038c7dfc83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyZWQlMjBzcG9ydHMlMjBjYXJ8ZW58MHx8fHwxNzcxNTk5Nzc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red sports car"
+    },
+    {
+      "id": "truck-listing",
+      "description": "Powerful blue pickup truck",
+      "imageUrl": "https://images.unsplash.com/photo-1545039741-523eb60a3527?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Ymx1ZSUyMHBpY2t1cCUyMHRydWNrfGVufDB8fHx8MTc3MTY3Njk4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue pickup truck"
+    },
+    {
+      "id": "electric-listing",
+      "description": "White electric sedan",
+      "imageUrl": "https://images.unsplash.com/photo-1692806222413-1751bbf9b57f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aGl0ZSUyMGVsZWN0cmljJTIwY2FyfGVufDB8fHx8MTc3MTY3Njk4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "white electric car"
+    },
+    {
+      "id": "family-van",
+      "description": "Comfortable family minivan",
+      "imageUrl": "https://images.unsplash.com/photo-1681379591361-3fef2619b4bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmYW1pbHklMjBtaW5pdmFufGVufDB8fHx8MTc3MTY3Njk4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "family minivan"
+    }
+  ]
+}

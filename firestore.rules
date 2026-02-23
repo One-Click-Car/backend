@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * CORE PHILOSOPHY
+     * This ruleset implements a robust, owner-centric security model designed for a car marketplace.
+     * It prioritizes data privacy for user-specific search history and requests while maintaining 
+     * a public, searchable catalog of car listings.
+     *
+     * DATA STRUCTURE
+     * 1. Public Data: Car listings are stored in the top-level `/cars` collection for global visibility.
+     * 2. Private Data: User profiles and all user-specific interactions (RecentSearches, SearchRequests, SavedCars) 
+     *    are nested under a hierarchical `/users/{userId}` tree.
+     *
+     * KEY SECURITY DECISIONS
+     * - Public Read/Owner Write: Car listings can be viewed by anyone but modified only by the seller.
+     * - Strict Path Ownership: User-scoped data is secured primarily by validating the {userId} in the 
+     *   document path against the authenticated user's UID.
+     * - Denormalization for Authorization: User IDs are denormalized into subcollection documents 
+     *   (e.g., 'userId' field in SearchRequest) to ensure data consistency and allow for future 
+     *   query-based security enhancements.
+     * - Immutable Ownership: Relational fields like 'sellerId' or 'userId' are protected from 
+     *   modification after a document is created.
+     */
+
+    // --- Helper Functions ---
+
+    /** @description Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Validates that the authenticated user's ID matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Combined check for document existence and ownership for destructive operations. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Publicly viewable car listings. Only the listing creator (seller) can modify or delete.
+     * @path /cars/{carId}
+     * @allow (get) Any user (including guests) views a specific car listing.
+     * @deny (update) User A tries to change the price on User B's car listing.
+     * @principle Public read with owner-only writes facilitated by denormalized 'sellerId'.
+     */
+    match /cars/{carId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.sellerId == request.auth.uid;
+      allow update: if isExistingOwner(resource.data.sellerId) && request.resource.data.sellerId == resource.data.sellerId;
+      allow delete: if isExistingOwner(resource.data.sellerId);
+    }
+
+    /**
+     * @description Private user profile documents. Accessible only by the user themselves.
+     * @path /users/{userId}
+     * @allow (create) Authenticated User A creates their own user profile at /users/A.
+     * @deny (get) Authenticated User A tries to read the profile of User B.
+     * @principle Strict path-based ownership for root user documents.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description Private search history. Each entry stores processed AI queries.
+       * @path /users/{userId}/recentSearches/{recentSearchId}
+       * @allow (list) User A fetches their own search history.
+       * @deny (create) User A tries to save a search under User B's path.
+       * @principle Enforces path consistency by matching internal 'userId' field with path parameter.
+       */
+      match /recentSearches/{recentSearchId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      /**
+       * @description User requests to buy or sell specific vehicles.
+       * @path /users/{userId}/searchRequests/{searchRequestId}
+       * @allow (get) User A views the status of their 'Active' buy request.
+       * @deny (update) User A attempts to change the 'userId' field of an existing request.
+       * @principle Authorization independence via denormalized ownership fields.
+       */
+      match /searchRequests/{searchRequestId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      /**
+       * @description Links between a user and the cars they have favorited.
+       * @path /users/{userId}/savedCars/{savedCarId}
+       * @allow (create) User A saves a car to their favorites list.
+       * @deny (list) Anonymous user tries to see User A's favorited cars.
+       * @principle Secure user-scoped subcollections using parent path wildcards.
+       */
+      match /savedCars/{savedCarId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+  }
+}
