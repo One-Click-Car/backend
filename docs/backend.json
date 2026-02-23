@@ -1,0 +1,356 @@
+{
+  "entities": {
+    "Car": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Car",
+      "type": "object",
+      "description": "Represents a vehicle listing available for sale with comprehensive details and specifications.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Car entity."
+        },
+        "make": {
+          "type": "string",
+          "description": "The manufacturer or brand of the car (e.g., 'Toyota')."
+        },
+        "model": {
+          "type": "string",
+          "description": "The specific model name of the car (e.g., 'Camry')."
+        },
+        "year": {
+          "type": "number",
+          "description": "The manufacturing year of the car."
+        },
+        "price": {
+          "type": "number",
+          "description": "The selling price of the car."
+        },
+        "mileage": {
+          "type": "number",
+          "description": "The total distance the car has traveled, in miles or kilometers."
+        },
+        "exteriorColor": {
+          "type": "string",
+          "description": "The exterior color of the car (e.g., 'White', 'Black', 'Metallic Blue')."
+        },
+        "interiorColor": {
+          "type": "string",
+          "description": "The interior color of the car (e.g., 'Black Leather', 'Grey Fabric')."
+        },
+        "transmissionType": {
+          "type": "string",
+          "description": "The type of transmission (e.g., 'Automatic', 'Manual')."
+        },
+        "engineType": {
+          "type": "string",
+          "description": "The type of engine (e.g., 'Petrol', 'Electric', 'Hybrid', 'Diesel')."
+        },
+        "bodyStyle": {
+          "type": "string",
+          "description": "The body style of the car (e.g., 'SUV', 'Sedan', 'Hatchback', 'Coupe')."
+        },
+        "fuelType": {
+          "type": "string",
+          "description": "The type of fuel the car uses (e.g., 'Gasoline', 'Diesel', 'Electric')."
+        },
+        "vin": {
+          "type": "string",
+          "description": "Vehicle Identification Number, a unique alphanumeric code for each car."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the car's features, condition, and history."
+        },
+        "imageUrls": {
+          "type": "array",
+          "description": "An array of URLs pointing to high-resolution images of the car.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postedDate": {
+          "type": "string",
+          "description": "The date and time when the car listing was created.",
+          "format": "date-time"
+        },
+        "sellerId": {
+          "type": "string",
+          "description": "Reference to the User who posted this car listing. (Relationship: User 1:N Car)"
+        }
+      },
+      "required": [
+        "id",
+        "make",
+        "model",
+        "year",
+        "price",
+        "mileage",
+        "postedDate",
+        "sellerId"
+      ]
+    },
+    "SearchRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SearchRequest",
+      "type": "object",
+      "description": "Represents a user's request to either find a specific car to buy or list a car for sale.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SearchRequest entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who submitted this request. (Relationship: User 1:N SearchRequest)"
+        },
+        "requestType": {
+          "type": "string",
+          "description": "The type of request: 'Buy' for finding a car, 'Sell' for listing a car."
+        },
+        "desiredMake": {
+          "type": "string",
+          "description": "The preferred car manufacturer for a buy request, or the car's make for a sell request."
+        },
+        "desiredModel": {
+          "type": "string",
+          "description": "The preferred car model for a buy request, or the car's model for a sell request."
+        },
+        "minYear": {
+          "type": "number",
+          "description": "The minimum manufacturing year preference for a buy request."
+        },
+        "maxYear": {
+          "type": "number",
+          "description": "The maximum manufacturing year preference for a buy request."
+        },
+        "minPrice": {
+          "type": "number",
+          "description": "The minimum price preference for a buy request, or the asking price for a sell request."
+        },
+        "maxPrice": {
+          "type": "number",
+          "description": "The maximum price preference for a buy request."
+        },
+        "minMileage": {
+          "type": "number",
+          "description": "The minimum mileage preference for a buy request."
+        },
+        "maxMileage": {
+          "type": "number",
+          "description": "The maximum mileage preference for a buy request."
+        },
+        "colorPreference": {
+          "type": "string",
+          "description": "The preferred exterior color for a buy request, or the car's color for a sell request."
+        },
+        "transmissionPreference": {
+          "type": "string",
+          "description": "The preferred transmission type for a buy request, or the car's transmission for a sell request."
+        },
+        "enginePreference": {
+          "type": "string",
+          "description": "The preferred engine type for a buy request, or the car's engine for a sell request."
+        },
+        "bodyStylePreference": {
+          "type": "string",
+          "description": "The preferred body style for a buy request, or the car's body style for a sell request."
+        },
+        "fuelTypePreference": {
+          "type": "string",
+          "description": "The preferred fuel type for a buy request, or the car's fuel type for a sell request."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional specific requirements or comments from the user."
+        },
+        "submissionDate": {
+          "type": "string",
+          "description": "The date and time when the request was submitted.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the request (e.g., 'Pending', 'Active', 'Fulfilled', 'Canceled')."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "requestType",
+        "submissionDate",
+        "status"
+      ]
+    },
+    "RecentSearch": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "RecentSearch",
+      "type": "object",
+      "description": "Stores a user's past natural language search queries and their processed structured query.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the RecentSearch entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who performed this search. (Relationship: User 1:N RecentSearch)"
+        },
+        "rawQuery": {
+          "type": "string",
+          "description": "The original free-form text input by the user for the search."
+        },
+        "structuredQuery": {
+          "type": "string",
+          "description": "The AI-processed structured representation of the search query, typically in a query language or JSON format."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The date and time when the search was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "rawQuery",
+        "structuredQuery",
+        "timestamp"
+      ]
+    },
+    "SavedCar": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SavedCar",
+      "type": "object",
+      "description": "Links a specific user to a car listing they have saved as a favorite.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SavedCar entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who saved this car. (Relationship: User 1:N SavedCar)"
+        },
+        "carId": {
+          "type": "string",
+          "description": "Reference to the Car entity that was saved. (Relationship: Car 1:N SavedCar)"
+        },
+        "savedDate": {
+          "type": "string",
+          "description": "The date and time when the car was saved by the user.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "carId",
+        "savedDate"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/cars/{carId}",
+        "definition": {
+          "entityName": "Car",
+          "schema": {
+            "$ref": "#/backend/entities/Car"
+          },
+          "description": "Publicly viewable collection of all car listings. Documents include 'sellerId' for owner-based write authorization.",
+          "params": [
+            {
+              "name": "carId",
+              "description": "The unique identifier for a specific car listing."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Private collection for user profiles and metadata. Each document is accessible only by the authenticated user whose ID matches the 'userId' parameter in the path.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication User ID of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/recentSearches/{recentSearchId}",
+        "definition": {
+          "entityName": "RecentSearch",
+          "schema": {
+            "$ref": "#/backend/entities/RecentSearch"
+          },
+          "description": "Private collection storing a user's past natural language search queries and their AI-processed structured form. Documents include a denormalized 'userId' field for robust authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication User ID of the user who performed the search."
+            },
+            {
+              "name": "recentSearchId",
+              "description": "The unique identifier for a specific recent search entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/searchRequests/{searchRequestId}",
+        "definition": {
+          "entityName": "SearchRequest",
+          "schema": {
+            "$ref": "#/backend/entities/SearchRequest"
+          },
+          "description": "Private collection storing a user's requests to find or sell a car. Documents include a denormalized 'userId' field for robust authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication User ID of the user who submitted the request."
+            },
+            {
+              "name": "searchRequestId",
+              "description": "The unique identifier for a specific search or sell request."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/savedCars/{savedCarId}",
+        "definition": {
+          "entityName": "SavedCar",
+          "schema": {
+            "$ref": "#/backend/entities/SavedCar"
+          },
+          "description": "Private collection linking a user to car listings they have saved as favorites. Documents include a denormalized 'userId' field for robust authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication User ID of the user who saved the car."
+            },
+            {
+              "name": "savedCarId",
+              "description": "The unique identifier for a specific saved car entry."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure prioritizes secure, scalable, and debuggable authorization using a combination of structural segregation and denormalization. For public-facing data like car listings, a top-level collection `/cars` is used, allowing for global read access while ensuring only the `sellerId` (owner) can modify their specific listing. This fulfills the 'Structural Segregation' mandate by grouping documents with homogeneous security posture (public read, owner write).\n\nFor private, user-specific data, a hierarchical path structure under `/users/{userId}` is adopted. This includes subcollections like `/users/{userId}/recentSearches`, `/users/{userId}/searchRequests`, and `/users/{userId}/savedCars`. This 'Path-Based Ownership' is critical for 'Authorization Independence'. Each document within these subcollections inherently derives its authorization context from the `{userId}` wildcard in its path, which can be directly compared against `request.auth.uid`. Furthermore, adhering to the 'Authorization Independence via Denormalization' mandate, all user-owned entities (e.g., `RecentSearch`, `SearchRequest`, `SavedCar`) explicitly include a `userId` field within their documents. This denormalization means security rules do not need to perform expensive or brittle `get()` operations on parent documents for authorization, as all necessary access control information is either in the path or within the document itself. This design enables atomic operations and simplifies rule debugging.\n\nRegarding QAPs (Rules are not Filters), the structure supports secure `list` operations. The `/cars` collection allows for public listing, with client-side queries and filters applied to the results. For user-specific subcollections, the path-based ownership (`/users/{userId}/...`) intrinsically limits `list` operations to data owned by the authenticating user (`request.auth.uid`), preventing unauthorized access to other users' private data while still allowing efficient retrieval of a user's own data. This design ensures that rules do not become filters but rather gatekeepers, maintaining database security and performance. The use of a dedicated `status` field in `SearchRequest` exemplifies 'Explicit State Modeling' for clarity and predictable schema."
+  }
+}
