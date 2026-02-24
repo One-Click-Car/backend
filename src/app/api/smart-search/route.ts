@@ -5,6 +5,16 @@ import { getMarketRecommendations } from '@/ai/flows/market-car-recommendations'
 import { findSemanticMatches } from '@/ai/flows/semantic-car-match';
 import { firebaseConfig } from '@/firebase/config';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 async function fetchSellData(): Promise<any> {
   // Use Firebase REST API with API key for authentication
   const url = `${firebaseConfig.databaseURL}/carRequests/sell.json?auth=${firebaseConfig.apiKey}`;
@@ -30,7 +40,7 @@ export async function POST(request: NextRequest) {
     if (!query || typeof query !== 'string') {
       return NextResponse.json(
         { error: 'A "query" string is required in the request body.' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -52,7 +62,7 @@ export async function POST(request: NextRequest) {
         recommendations,
         matchedCars: [],
         message: 'No cars found in database'
-      });
+      }, { headers: corsHeaders });
     }
 
     // Parse the nested structure: sell/{userId}/{carId}
@@ -80,7 +90,7 @@ export async function POST(request: NextRequest) {
         recommendations,
         matchedCars: [],
         message: 'No cars found in database'
-      });
+      }, { headers: corsHeaders });
     }
 
     // Step 3: Semantic matching with AI
@@ -103,13 +113,13 @@ export async function POST(request: NextRequest) {
       query,
       recommendations,
       matchedCars
-    });
+    }, { headers: corsHeaders });
 
   } catch (error: any) {
     console.error('Smart Search API Error:', error);
     return NextResponse.json(
       { error: error.message || 'An internal server error occurred.' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
