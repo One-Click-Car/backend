@@ -4,6 +4,16 @@ import { v2 as cloudinary } from 'cloudinary';
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -18,7 +28,7 @@ export async function POST(request: Request) {
   if (!cloudName || !apiKey || !apiSecret) {
     return NextResponse.json(
       { error: 'Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 
@@ -31,7 +41,7 @@ export async function POST(request: Request) {
     if (toUpload.length === 0) {
       return NextResponse.json(
         { error: 'No file provided. Use form field "file".' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -42,13 +52,13 @@ export async function POST(request: Request) {
       if (file.size > MAX_FILE_SIZE) {
         return NextResponse.json(
           { error: `File ${file.name} is too large. Max size is 10MB.` },
-          { status: 400 }
+          { status: 400, headers: corsHeaders }
         );
       }
       if (!ALLOWED_TYPES.includes(file.type)) {
         return NextResponse.json(
           { error: `Invalid type for ${file.name}. Allowed: JPEG, PNG, WebP, GIF.` },
-          { status: 400 }
+          { status: 400, headers: corsHeaders }
         );
       }
 
@@ -64,12 +74,12 @@ export async function POST(request: Request) {
       urls.push(result.secure_url);
     }
 
-    return NextResponse.json({ urls });
+    return NextResponse.json({ urls }, { headers: corsHeaders });
   } catch (err: unknown) {
     console.error('Upload error:', err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Upload failed.' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
