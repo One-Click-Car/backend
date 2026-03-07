@@ -2,18 +2,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Camera, Loader2, CheckCircle2, Info } from 'lucide-react';
+import { Sparkles, Loader2, CheckCircle2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { generateAIListedCarDescription, AIListedCarDescriptionGenerationOutput } from '@/ai/flows/ai-listed-car-description-generation';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ImageUpload } from '@/components/image-upload';
 
 export default function SellCarPage() {
   const [description, setDescription] = useState('');
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiResult, setAiResult] = useState<AIListedCarDescriptionGenerationOutput | null>(null);
 
@@ -70,11 +71,14 @@ export default function SellCarPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 hover:bg-secondary/50 cursor-pointer transition-colors">
-                    <Camera className="h-8 w-8 text-muted-foreground mb-2" />
-                    <span className="text-xs font-bold text-muted-foreground">Upload Photos</span>
-                  </div>
+                <div className="space-y-4">
+                  <Label className="text-sm font-bold">תמונות הרכב</Label>
+                  <ImageUpload
+                    value={imageUrls}
+                    onChange={setImageUrls}
+                    maxFiles={10}
+                    maxSizeMB={10}
+                  />
                   <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 opacity-50 cursor-not-allowed">
                     <Info className="h-8 w-8 text-muted-foreground mb-2" />
                     <span className="text-xs font-bold text-muted-foreground">Vehicle Report (Soon)</span>
@@ -131,6 +135,21 @@ export default function SellCarPage() {
                     <CardTitle className="font-headline font-bold text-primary">Generated Listing</CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 space-y-4">
+                    {imageUrls.length > 0 && (
+                      <div className="flex gap-2 overflow-x-auto pb-2 rounded-lg">
+                        {imageUrls.slice(0, 4).map((url, i) => (
+                          <div key={url} className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-border">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt={`תמונה ${i + 1}`} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                        {imageUrls.length > 4 && (
+                          <div className="w-20 h-20 flex-shrink-0 rounded-lg bg-secondary flex items-center justify-center text-xs font-bold text-muted-foreground">
+                            +{imageUrls.length - 4}
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 gap-2">
                       <div className="p-2 bg-secondary rounded-lg">
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Car</p>
